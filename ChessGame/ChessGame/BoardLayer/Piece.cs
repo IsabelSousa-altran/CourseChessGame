@@ -11,9 +11,10 @@ namespace BoardLayer
         public int MoveCount { get; protected set; }
         public Board Board { get; set; }
 
-        public Piece(PositionBoard position, Color color, Board board)
+        public Piece( Color color, Board board)
         {
-            PositionBoard = position;
+            // The piece has no position yet, it is null (the one who places the piece is the board)
+            PositionBoard = null;
             Color = color;
             MoveCount = 0;
             Board = board;
