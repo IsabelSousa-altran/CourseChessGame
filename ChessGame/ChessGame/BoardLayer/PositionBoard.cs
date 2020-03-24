@@ -6,20 +6,20 @@ namespace BoardLayer
 {
     class PositionBoard
     {
-        public int Rows { get; set; }
-        public int Columms { get; set; }
+        public int Row { get; set; }
+        public int Columm { get; set; }
 
-        public PositionBoard(int rows, int columms)
+        public PositionBoard(int row, int columm)
         {
-            Rows = rows;
-            Columms = columms;
+            Row = row;
+            Columm = columm;
         }
 
         public override string ToString()
         {
-            return Rows 
+            return Row 
                 + ", "
-                + Columms;
+                + Columm;
         }
     }
 }

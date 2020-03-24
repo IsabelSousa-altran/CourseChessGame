@@ -23,6 +23,15 @@ namespace BoardLayer
             return pieces[row, columm];
         }
 
+        // Places a piece "piece" in the position "position"(has row and columm from PositionBoard)
+        public void PlacePieceOnBoard (Piece piece, PositionBoard position)
+        { 
+            // Places the piece in the matrix
+            pieces[position.Row, position.Columm] = piece;
+
+            // The position of the piece is now "position"
+            piece.PositionBoard = position;
+        }
 
     }
 }

@@ -6,14 +6,14 @@ namespace BoardLayer
 {
     class Piece
     {
-        public PositionBoard Position { get; set; }
+        public PositionBoard PositionBoard { get; set; }
         public Color Color { get; protected set; }
         public int MoveCount { get; protected set; }
         public Board Board { get; set; }
 
         public Piece(PositionBoard position, Color color, Board board)
         {
-            Position = position;
+            PositionBoard = position;
             Color = color;
             MoveCount = 0;
             Board = board;
