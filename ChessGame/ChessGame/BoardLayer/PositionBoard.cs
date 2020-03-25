@@ -7,19 +7,19 @@ namespace BoardLayer
     class PositionBoard
     {
         public int Row { get; set; }
-        public int Columm { get; set; }
+        public int Column { get; set; }
 
         public PositionBoard(int row, int columm)
         {
             Row = row;
-            Columm = columm;
+            Column = columm;
         }
 
         public override string ToString()
         {
             return Row 
                 + ", "
-                + Columm;
+                + Column;
         }
     }
 }

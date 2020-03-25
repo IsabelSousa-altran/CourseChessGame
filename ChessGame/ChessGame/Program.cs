@@ -10,15 +10,11 @@ namespace ChessGame
         {
             try
             {
-                Board board = new Board(8, 8);
+                ChessMatch match = new ChessMatch();
 
 
-                board.PlacePieceOnBoard(new Rook(Color.Black, board), new PositionBoard(0, 0));
-                board.PlacePieceOnBoard(new Rook(Color.Black, board), new PositionBoard(1, 3));
-                board.PlacePieceOnBoard(new King(Color.Black, board), new PositionBoard(0, 2));
-
-                board.PlacePieceOnBoard(new Rook(Color.White, board), new PositionBoard(3, 5));
-                Screen.PrintBoard(board);
+                
+                Screen.PrintBoard(match.Board);
 
                 Console.ReadLine();
             }

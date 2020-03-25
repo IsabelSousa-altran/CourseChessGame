@@ -4,12 +4,12 @@ namespace ChessGameLayer
 {
     class ChessPosition
     {
-        public char Columm { get; set; }
+        public char Column { get; set; }
         public int Row { get; set; }
 
-        public ChessPosition(char columm, int row)
+        public ChessPosition(char column, int row)
         {
-            Columm = columm;
+            Column = column;
             Row = row;
         }
 
@@ -18,14 +18,13 @@ namespace ChessGameLayer
         // and start counting from the lower left corner, contrary to the matrix that starts in the upper left corner
         public PositionBoard ChessPositionToMatrixPosition()
         {
-            // 
-            return new PositionBoard(8 - Row, Columm - 'a');
+            return new PositionBoard(8 - Row, Column - 'a');
         }
 
         public override string ToString()
         {
             return "" 
-                + Columm
+                + Column
                 + Row;
         }
     }

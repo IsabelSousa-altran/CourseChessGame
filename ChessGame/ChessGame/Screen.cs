@@ -14,7 +14,7 @@ namespace ChessGame
                 //It will print on the screen the numbers corresponding to each line (1-8)
                 Console.Write(8 - i + " ");
 
-                for (int j = 0; j < board.Columms; j++)
+                for (int j = 0; j < board.Columns; j++)
                 {
                     // If there is no piece in row i column j
                     if (board.Piece(i,j) == null)
