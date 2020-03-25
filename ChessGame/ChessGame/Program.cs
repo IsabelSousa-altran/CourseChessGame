@@ -17,10 +17,7 @@ namespace ChessGame
                     try
                     {
                         Console.Clear();
-                        Screen.PrintBoard(match.Board);
-                        Console.WriteLine();
-                        Console.WriteLine($"Turn: {match.TurnToPlay} ");
-                        Console.WriteLine($"Awaiting move: {match.CurrentPlayer}");
+                        Screen.PrintMatch(match);
 
                         Console.WriteLine();
                         Console.Write("Original: ");

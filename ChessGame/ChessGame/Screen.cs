@@ -1,12 +1,46 @@
 ﻿using System;
 using BoardLayer;
 using ChessGameLayer;
-using System.Text;
+using System.Collections.Generic;
 
 namespace ChessGame
 {
     class Screen
     {
+        public static void PrintMatch(ChessMatch match)
+        {
+            Screen.PrintBoard(match.Board);
+            Console.WriteLine();
+            PrintCapturedPieces(match);
+            Console.WriteLine();
+            Console.WriteLine($"Turn: {match.TurnToPlay} ");
+            Console.WriteLine($"Awaiting move: {match.CurrentPlayer}");
+        }
+
+        // It will demonstrate on the screen which pieces were captured
+        public static void PrintCapturedPieces(ChessMatch match)
+        {
+            Console.WriteLine("Captured Pieces: ");
+            Console.Write("White: ");
+            PrintSet(match.CapturedPiecesByColor(Color.White));
+            Console.WriteLine();
+            Console.Write("Black: ");
+            ConsoleColor previousColor = Console.ForegroundColor;
+            Console.ForegroundColor = ConsoleColor.DarkBlue;
+            PrintSet(match.CapturedPiecesByColor(Color.Black));
+            Console.ForegroundColor = previousColor;
+            Console.WriteLine();
+        }
+
+        public static void PrintSet(HashSet<Piece> set)
+        {
+            Console.Write("[");
+            foreach (Piece item in set)
+            {
+                Console.Write(item + " ");
+            }
+            Console.Write("]");
+        }
         // Will print the board on the screen
         public static void PrintBoard (Board board)
         {

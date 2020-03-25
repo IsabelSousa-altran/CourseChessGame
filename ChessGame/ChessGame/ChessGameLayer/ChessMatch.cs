@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using BoardLayer;
 
 namespace ChessGameLayer
@@ -9,6 +9,8 @@ namespace ChessGameLayer
         public int TurnToPlay { get; private set; }
         public Color CurrentPlayer { get; private set; }
         public bool MatchIsOver { get; private set; }
+        private HashSet<Piece> pieces;
+        private HashSet<Piece> capturedPieces;
 
         public ChessMatch()
         {
@@ -16,6 +18,9 @@ namespace ChessGameLayer
             TurnToPlay = 1;
             CurrentPlayer = Color.White;
             MatchIsOver = false;
+            pieces = new HashSet<Piece>();
+            capturedPieces = new HashSet<Piece>();
+            
             placeAllPieces();
         }
 
@@ -31,6 +36,13 @@ namespace ChessGameLayer
             Piece capturedPiece = Board.RemovePiece(destinationPosition);
             // Place the piece that was removed from the original position into the destination position
             Board.PlacePieceOnBoard(piece, destinationPosition);
+
+            //If had a piece in the target position
+            if (capturedPiece != null)
+            {
+                // Will add this piece to the list of captured pieces
+                capturedPieces.Add(capturedPiece);
+            }
         }
 
         // The piece will perform a movement from the origin position to the destination position
@@ -82,21 +94,63 @@ namespace ChessGameLayer
                 CurrentPlayer = Color.White;
             }
         }
+
+        public HashSet<Piece> CapturedPiecesByColor(Color color)
+        {
+            HashSet<Piece> newListpieces = new HashSet<Piece>();
+            // Will go through the list of captured pieces.
+            foreach (Piece item in capturedPieces)
+            {
+                // If the color of that piece is the same as the color listed then put it on a new list. 
+                // In the end it returns that new list.
+                if (item.Color == color)
+                {
+                    newListpieces.Add(item);
+                }
+            }
+            return newListpieces;
+        }
+
+        public HashSet<Piece> PiecesStillInPlay(Color color)
+        {
+            HashSet<Piece> newListpieces = new HashSet<Piece>();
+            // Will go through the list of all pieces in the board.
+            foreach (Piece item in pieces)
+            {
+                // If the color of that piece is the same as the color listed then put it on a new list. 
+                // In the end it returns that new list.
+                if (item.Color == color)
+                {
+                    newListpieces.Add(item);
+                }
+            }
+            // The new list will contain only the pieces of a given color that have not been captured.
+            newListpieces.ExceptWith(CapturedPiecesByColor(color));
+            return newListpieces;
+        }
+
+        // To create new pieces
+        public void PutNewPiece(char column, int row, Piece piece)
+        {
+            Board.PlacePieceOnBoard(piece, new ChessPosition(column, row).ChessPositionToMatrixPosition());
+            // will add the piece to the list
+            pieces.Add(piece);
+        }
         private void placeAllPieces()
         {
-            Board.PlacePieceOnBoard(new Rook(Color.White, Board), new ChessPosition('c', 1).ChessPositionToMatrixPosition());
-            Board.PlacePieceOnBoard(new Rook(Color.White, Board), new ChessPosition('c', 2).ChessPositionToMatrixPosition());
-            Board.PlacePieceOnBoard(new Rook(Color.White, Board), new ChessPosition('d', 2).ChessPositionToMatrixPosition());
-            Board.PlacePieceOnBoard(new Rook(Color.White, Board), new ChessPosition('e', 2).ChessPositionToMatrixPosition());
-            Board.PlacePieceOnBoard(new Rook(Color.White, Board), new ChessPosition('e', 1).ChessPositionToMatrixPosition());
-            Board.PlacePieceOnBoard(new King(Color.White, Board), new ChessPosition('d', 1).ChessPositionToMatrixPosition());
+            PutNewPiece('c', 1, new Rook(Color.White, Board));
+            PutNewPiece('c', 2, new Rook(Color.White, Board));
+            PutNewPiece('d', 2, new Rook(Color.White, Board));
+            PutNewPiece('e', 2, new Rook(Color.White, Board));
+            PutNewPiece('e', 1, new Rook(Color.White, Board));
+            PutNewPiece('d', 1, new King(Color.White, Board));
 
-            Board.PlacePieceOnBoard(new Rook(Color.Black, Board), new ChessPosition('c', 7).ChessPositionToMatrixPosition());
-            Board.PlacePieceOnBoard(new Rook(Color.Black, Board), new ChessPosition('c', 8).ChessPositionToMatrixPosition());
-            Board.PlacePieceOnBoard(new Rook(Color.Black, Board), new ChessPosition('d', 7).ChessPositionToMatrixPosition());
-            Board.PlacePieceOnBoard(new Rook(Color.Black, Board), new ChessPosition('e', 7).ChessPositionToMatrixPosition());
-            Board.PlacePieceOnBoard(new Rook(Color.Black, Board), new ChessPosition('e', 8).ChessPositionToMatrixPosition());
-            Board.PlacePieceOnBoard(new King(Color.Black, Board), new ChessPosition('d', 8).ChessPositionToMatrixPosition());
+            PutNewPiece('c', 7, new Rook(Color.Black, Board));
+            PutNewPiece('c', 8, new Rook(Color.Black, Board));
+            PutNewPiece('d', 7, new Rook(Color.Black, Board));
+            PutNewPiece('e', 7, new Rook(Color.Black, Board));
+            PutNewPiece('e', 8, new Rook(Color.Black, Board));
+            PutNewPiece('d', 8, new King(Color.Black, Board));
         }
 
     }
