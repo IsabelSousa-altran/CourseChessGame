@@ -8,12 +8,14 @@ namespace ChessGameLayer
         public Board Board { get; private set; }
         private int turnToPlay;
         private Color CurrentPlayer;
+        public bool MatchIsOver { get; private set; }
 
         public ChessMatch()
         {
             Board = new Board(8, 8);
             turnToPlay = 1;
             CurrentPlayer = Color.White;
+            MatchIsOver = false;
             placeAllPieces();
         }
 

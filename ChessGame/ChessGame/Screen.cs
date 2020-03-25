@@ -1,5 +1,6 @@
 ﻿using System;
 using BoardLayer;
+using ChessGameLayer;
 using System.Text;
 
 namespace ChessGame
@@ -31,6 +32,15 @@ namespace ChessGame
                 Console.WriteLine();
             }
             Console.WriteLine("  a b c d e f g h ");
+        }
+
+        // Will read the position provided by the player and return it 
+        public static ChessPosition ReadChessPosition()
+        {
+            string userChessPosition = Console.ReadLine();
+            char columnChar = userChessPosition[0];
+            int rowInt = int.Parse(userChessPosition[1] + "");
+            return new ChessPosition(columnChar, rowInt);
         }
 
         // It will change the color of the piece, in case the piece is black
