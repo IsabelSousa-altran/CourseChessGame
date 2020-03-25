@@ -20,11 +20,19 @@ namespace ChessGame
                     Console.WriteLine();
                     Console.Write("Source: ");
                     // It is always necessary to transform the position provided by the user (chess position) into a matrix position
-                    PositionBoard positionSource = Screen.ReadChessPosition().ChessPositionToMatrixPosition();
+                    PositionBoard Originalposition = Screen.ReadChessPosition().ChessPositionToMatrixPosition();
+
+                    // pick up the required piece in the original position, check which movements are possible and store it in the matrix
+                    bool[,] PossiblePositions = match.Board.Piece(Originalposition).PossibleMoviments();
+
+                    Console.Clear();
+                    Screen.PrintBoard(match.Board, PossiblePositions);
+
+                    Console.WriteLine();
                     Console.Write("Destination: ");
                     PositionBoard positionDestination = Screen.ReadChessPosition().ChessPositionToMatrixPosition();
 
-                    match.PerformMovement(positionSource, positionDestination);
+                    match.PerformMovement(Originalposition, positionDestination);
 
                 }
 

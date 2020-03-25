@@ -20,10 +20,10 @@ namespace ChessGameLayer
         }
 
         // The piece will perform a movement from the origin position to the destination position
-        public void PerformMovement(PositionBoard positionSource, PositionBoard positionDestination)
+        public void PerformMovement(PositionBoard originalPosition, PositionBoard positionDestination)
         {
             // Removes the piece from the defined position (origin position),
-            Piece piece = Board.RemovePiece(positionSource);
+            Piece piece = Board.RemovePiece(originalPosition);
             // Increase a play.
             piece.IncreaseMovementCount();
             // If there is a piece in the destination position, it will be removed. 
