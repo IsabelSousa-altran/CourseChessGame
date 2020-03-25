@@ -20,13 +20,37 @@ namespace BoardLayer
             Board = board;
         }
 
-        // The movement rule depends on each piece, so it is an abstract method.
-        // We will have a matrix of true and false that shows us where it is possible to move that piece
-        public abstract bool[,] PossibleMoviments();
-
         public void IncreaseMovementCount()
         {
             MovementCount++;
         }
+
+        // It will check if there are any possible moves
+        public bool ThereArePossibleMovements()
+        {
+            bool[,] matrixPossibleMoves = PossibleMoviments();
+            for (int i = 0; i < Board.Rows; i++)
+            {
+                for (int j = 0; j < Board.Columns; j++)
+                {
+                    if (matrixPossibleMoves[i,j])
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        public bool CanMoveTo(PositionBoard position)
+        {
+            return PossibleMoviments()[position.Row, position.Column];
+        }
+
+        // The movement rule depends on each piece, so it is an abstract method.
+        // We will have a matrix of true and false that shows us where it is possible to move that piece
+        public abstract bool[,] PossibleMoviments();
+
+       
     }
 }

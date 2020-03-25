@@ -14,26 +14,37 @@ namespace ChessGame
 
                 while (!match.MatchIsOver)
                 {
-                    Console.Clear();
-                    Screen.PrintBoard(match.Board);
+                    try
+                    {
+                        Console.Clear();
+                        Screen.PrintBoard(match.Board);
+                        Console.WriteLine();
+                        Console.WriteLine($"Turn: {match.TurnToPlay} ");
+                        Console.WriteLine($"Awaiting move: {match.CurrentPlayer}");
 
-                    Console.WriteLine();
-                    Console.Write("Source: ");
-                    // It is always necessary to transform the position provided by the user (chess position) into a matrix position
-                    PositionBoard Originalposition = Screen.ReadChessPosition().ChessPositionToMatrixPosition();
+                        Console.WriteLine();
+                        Console.Write("Original: ");
+                        // It is always necessary to transform the position provided by the user (chess position) into a matrix position
+                        PositionBoard originalPosition = Screen.ReadChessPosition().ChessPositionToMatrixPosition();
+                        match.ValidateOriginalPosition(originalPosition);
 
-                    // pick up the required piece in the original position, check which movements are possible and store it in the matrix
-                    bool[,] PossiblePositions = match.Board.Piece(Originalposition).PossibleMoviments();
+                        // pick up the required piece in the original position, check which movements are possible and store it in the matrix
+                        bool[,] PossiblePositions = match.Board.Piece(originalPosition).PossibleMoviments();
 
-                    Console.Clear();
-                    Screen.PrintBoard(match.Board, PossiblePositions);
+                        Console.Clear();
+                        Screen.PrintBoard(match.Board, PossiblePositions);
 
-                    Console.WriteLine();
-                    Console.Write("Destination: ");
-                    PositionBoard positionDestination = Screen.ReadChessPosition().ChessPositionToMatrixPosition();
-
-                    match.PerformMovement(Originalposition, positionDestination);
-
+                        Console.WriteLine();
+                        Console.Write("Destination: ");
+                        PositionBoard destinationPosition = Screen.ReadChessPosition().ChessPositionToMatrixPosition();
+                        match.ValidateDestinationPosition(originalPosition, destinationPosition);
+                        match.MakeAMove(originalPosition, destinationPosition);
+                    }
+                    catch (BoardException e)
+                    {
+                        Console.WriteLine(e.Message);
+                        Console.ReadLine();
+                    }
                 }
 
                 Screen.PrintBoard(match.Board);
