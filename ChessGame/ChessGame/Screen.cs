@@ -15,6 +15,10 @@ namespace ChessGame
             Console.WriteLine();
             Console.WriteLine($"Turn: {match.TurnToPlay} ");
             Console.WriteLine($"Awaiting move: {match.CurrentPlayer}");
+            if (match.MatchInCheck)
+            {
+                Console.WriteLine("XEQUE!");
+            }
         }
 
         // It will demonstrate on the screen which pieces were captured
@@ -30,6 +34,7 @@ namespace ChessGame
             PrintSet(match.CapturedPiecesByColor(Color.Black));
             Console.ForegroundColor = previousColor;
             Console.WriteLine();
+            
         }
 
         public static void PrintSet(HashSet<Piece> set)

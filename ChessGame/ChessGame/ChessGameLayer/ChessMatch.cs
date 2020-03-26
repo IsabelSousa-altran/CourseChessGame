@@ -9,8 +9,9 @@ namespace ChessGameLayer
         public int TurnToPlay { get; private set; }
         public Color CurrentPlayer { get; private set; }
         public bool MatchIsOver { get; private set; }
-        private HashSet<Piece> pieces;
-        private HashSet<Piece> capturedPieces;
+        private HashSet<Piece> setPieces;
+        private HashSet<Piece> setCapturedPieces;
+        public bool MatchInCheck { get; private set; }
 
         public ChessMatch()
         {
@@ -18,14 +19,15 @@ namespace ChessGameLayer
             TurnToPlay = 1;
             CurrentPlayer = Color.White;
             MatchIsOver = false;
-            pieces = new HashSet<Piece>();
-            capturedPieces = new HashSet<Piece>();
+            MatchInCheck = false;
+            setPieces = new HashSet<Piece>();
+            setCapturedPieces = new HashSet<Piece>();
             
             placeAllPieces();
         }
 
         
-        public void PerformMovement(PositionBoard originalPosition, PositionBoard destinationPosition)
+        public Piece PerformMovement(PositionBoard originalPosition, PositionBoard destinationPosition)
         {
             // Removes the piece from the defined position (origin position),
             Piece piece = Board.RemovePiece(originalPosition);
@@ -41,14 +43,49 @@ namespace ChessGameLayer
             if (capturedPiece != null)
             {
                 // Will add this piece to the list of captured pieces
-                capturedPieces.Add(capturedPiece);
+                setCapturedPieces.Add(capturedPiece);
             }
+            return capturedPiece;
         }
 
-        // The piece will perform a movement from the origin position to the destination position
+        public void UndoMoves(PositionBoard orignalPosition, PositionBoard destiantionPosition, Piece capturedPiece)
+        {
+            Piece piece = Board.RemovePiece(destiantionPosition);
+            piece.DecreaseMovementCount();
+
+            // There was a piece that was captured
+            if (capturedPiece != null)
+            {
+                // I go to the board and place the captured piece back at the destination
+                Board.PlacePieceOnBoard(capturedPiece, destiantionPosition);
+                // I go to the set of captured pieces and remove that captured piece
+                setCapturedPieces.Remove(capturedPiece);
+            }
+            // Put the piece back in the original position.
+            Board.PlacePieceOnBoard(piece, orignalPosition);
+        }
+
+        // The piece will perform a movement from the origin position to the destination position.
         public void MakeAMove(PositionBoard originalPosition, PositionBoard destinationPosition)
         {
-            PerformMovement(originalPosition, destinationPosition);
+           Piece capturedPiece = PerformMovement(originalPosition, destinationPosition);
+
+            // The opponent can be in check with my move, but I can't.
+            if (KingIsInCheck(CurrentPlayer))
+            {
+                UndoMoves(originalPosition, destinationPosition, capturedPiece);
+                throw new BoardException("You can't put yourself in check");
+            }
+
+            if (KingIsInCheck(colorOpponent(CurrentPlayer)))
+            {
+                MatchInCheck = true;
+            }
+            else
+            {
+                MatchInCheck = false;
+            }
+
             // change the turn
             TurnToPlay++;
             changesPlayersTurn();
@@ -99,7 +136,7 @@ namespace ChessGameLayer
         {
             HashSet<Piece> newListpieces = new HashSet<Piece>();
             // Will go through the list of captured pieces.
-            foreach (Piece item in capturedPieces)
+            foreach (Piece item in setCapturedPieces)
             {
                 // If the color of that piece is the same as the color listed then put it on a new list. 
                 // In the end it returns that new list.
@@ -115,7 +152,7 @@ namespace ChessGameLayer
         {
             HashSet<Piece> newListpieces = new HashSet<Piece>();
             // Will go through the list of all pieces in the board.
-            foreach (Piece item in pieces)
+            foreach (Piece item in setPieces)
             {
                 // If the color of that piece is the same as the color listed then put it on a new list. 
                 // In the end it returns that new list.
@@ -129,12 +166,66 @@ namespace ChessGameLayer
             return newListpieces;
         }
 
+        // Check the opponent's color
+        private Color colorOpponent (Color cor)
+        {
+            if (cor == Color.White)
+            {
+                return Color.Black;
+            }
+            else
+            {
+                return Color.White;
+            }
+        }
+
+        // Will return the king of a given color.
+        private Piece king (Color color)
+        {
+            foreach  (Piece item in PiecesStillInPlay(color))
+            {
+                // To test whether a variable of the superclass type is an instance of some subclass, 
+                // it is necessary to use the "is".
+                if (item is King)
+                {
+                    return item;
+                }
+            }
+            // If the cycle "for" ends and there is no king (it is not supposed to happen) it will return null.
+            return null;
+        }
+
+        // It will check if the king of a given color is in check.
+        public bool KingIsInCheck(Color color)
+        {
+            Piece kingPiece = king(color);
+            if (kingPiece == null)
+            {
+                throw new BoardException($"There is no {color} king on the board!");
+            }
+
+            // For each opposing piece, I will take the possible movements of each piece
+            foreach (Piece item in PiecesStillInPlay(colorOpponent(color)))
+            {
+                bool[,] possibleMovesMatrix = item.PossibleMoviments();
+                // If there is a possible movement (true) in the position where the king is, 
+                // that means that piece can move to the king.
+                if (possibleMovesMatrix[kingPiece.PositionBoard.Row, kingPiece.PositionBoard.Column])
+                {
+                    // Tt means that the king is in check
+                    return true;
+                }
+            }
+            // if you go through all the pieces and in the end there is no true it means that the king is not in check
+            return false;
+        }
+
         // To create new pieces
         public void PutNewPiece(char column, int row, Piece piece)
         {
             Board.PlacePieceOnBoard(piece, new ChessPosition(column, row).ChessPositionToMatrixPosition());
             // will add the piece to the list
-            pieces.Add(piece);
+            setPieces.Add(piece);
         }
         private void placeAllPieces()
         {

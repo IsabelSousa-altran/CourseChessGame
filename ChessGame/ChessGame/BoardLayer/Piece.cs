@@ -25,6 +25,11 @@ namespace BoardLayer
             MovementCount++;
         }
 
+        public void DecreaseMovementCount()
+        {
+            MovementCount--;
+        }
+
         // It will check if there are any possible moves
         public bool ThereArePossibleMovements()
         {
