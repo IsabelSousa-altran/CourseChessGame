@@ -86,9 +86,19 @@ namespace ChessGameLayer
                 MatchInCheck = false;
             }
 
-            // change the turn
-            TurnToPlay++;
-            changesPlayersTurn();
+            // If the method in which the checkmate is being tested returns true then the game is ended
+            if (TestCheckmate(colorOpponent(CurrentPlayer)))
+            {
+                MatchIsOver = true;
+            }
+            else
+            // Else continues with the next player's move
+            {
+                // change the turn
+                TurnToPlay++;
+                changesPlayersTurn();
+            }
+            
         }
 
         public void ValidateOriginalPosition(PositionBoard position)
@@ -220,6 +230,42 @@ namespace ChessGameLayer
             return false;
         }
 
+        // Check on all pieces of the same color as the king if there  is one that moves the check from the king. 
+        // If we run out of possibilities and it is not possible to move any, we conclude that the king is in checkmate.
+        // And the game is over.
+        public bool TestCheckmate(Color color)
+        {
+            // If the king of that color is not in check, then there is no need to check if he is in checkmate
+            if (!KingIsInCheck(color))
+            {
+                return false;
+            }
+            foreach (Piece item in PiecesStillInPlay(color))
+            {
+                bool[,] possibleMovesMatrix = item.PossibleMoviments();
+                for (int i = 0; i < Board.Rows; i++)
+                {
+                    for (int j = 0; j < Board.Columns; j++)
+                    {
+                        if (possibleMovesMatrix[i,j])
+                        {
+                            PositionBoard originalPosition = item.PositionBoard;
+                            PositionBoard destination = new PositionBoard(i, j);
+                            Piece capturedPiece = PerformMovement(originalPosition, destination);
+                            bool checkTest = KingIsInCheck(color);
+                            UndoMoves(originalPosition, destination, capturedPiece);
+                            if (!checkTest)
+                            {
+                                return false;
+                            }
+                        }
+                    }
+                }
+
+            }
+            return true;
+        }
+
         // To create new pieces
         public void PutNewPiece(char column, int row, Piece piece)
         {
@@ -229,19 +275,28 @@ namespace ChessGameLayer
         }
         private void placeAllPieces()
         {
-            PutNewPiece('c', 1, new Rook(Color.White, Board));
-            PutNewPiece('c', 2, new Rook(Color.White, Board));
-            PutNewPiece('d', 2, new Rook(Color.White, Board));
-            PutNewPiece('e', 2, new Rook(Color.White, Board));
-            PutNewPiece('e', 1, new Rook(Color.White, Board));
-            PutNewPiece('d', 1, new King(Color.White, Board));
+        //    PutNewPiece('c', 1, new Rook(Color.White, Board));
+        //    PutNewPiece('c', 2, new Rook(Color.White, Board));
+        //    PutNewPiece('d', 2, new Rook(Color.White, Board));
+        //    PutNewPiece('e', 2, new Rook(Color.White, Board));
+        //    PutNewPiece('e', 1, new Rook(Color.White, Board));
+        //    PutNewPiece('d', 1, new King(Color.White, Board));
 
-            PutNewPiece('c', 7, new Rook(Color.Black, Board));
-            PutNewPiece('c', 8, new Rook(Color.Black, Board));
-            PutNewPiece('d', 7, new Rook(Color.Black, Board));
-            PutNewPiece('e', 7, new Rook(Color.Black, Board));
-            PutNewPiece('e', 8, new Rook(Color.Black, Board));
-            PutNewPiece('d', 8, new King(Color.Black, Board));
+        //    PutNewPiece('c', 7, new Rook(Color.Black, Board));
+        //    PutNewPiece('c', 8, new Rook(Color.Black, Board));
+        //    PutNewPiece('d', 7, new Rook(Color.Black, Board));
+        //    PutNewPiece('e', 7, new Rook(Color.Black, Board));
+        //    PutNewPiece('e', 8, new Rook(Color.Black, Board));
+        //    PutNewPiece('d', 8, new King(Color.Black, Board));
+
+            PutNewPiece('c', 1, new Rook(Color.White, Board));
+            PutNewPiece('d', 1, new King(Color.White, Board));
+            PutNewPiece('h', 7, new Rook(Color.White, Board));
+
+            PutNewPiece('a', 8, new King(Color.Black, Board));
+            PutNewPiece('b', 8, new Rook(Color.Black, Board));
+
+
         }
 
     }

@@ -43,10 +43,10 @@ namespace ChessGame
                         Console.ReadLine();
                     }
                 }
+                Console.Clear();
+                Screen.PrintMatch(match);
 
-                Screen.PrintBoard(match.Board);
-
-                Console.ReadLine();
+                
             }
             catch (BoardException e)
             {

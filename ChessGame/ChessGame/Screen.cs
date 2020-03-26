@@ -14,11 +14,20 @@ namespace ChessGame
             PrintCapturedPieces(match);
             Console.WriteLine();
             Console.WriteLine($"Turn: {match.TurnToPlay} ");
-            Console.WriteLine($"Awaiting move: {match.CurrentPlayer}");
-            if (match.MatchInCheck)
+            if (!match.MatchIsOver)
             {
-                Console.WriteLine("XEQUE!");
+                Console.WriteLine($"Awaiting move: {match.CurrentPlayer}");
+                if (match.MatchInCheck)
+                {
+                    Console.WriteLine("XEQUE!");
+                }
             }
+            else
+            {
+                Console.WriteLine("XEQUEMATE!");
+                Console.WriteLine($"Winner: {match.CurrentPlayer}");
+            }
+            
         }
 
         // It will demonstrate on the screen which pieces were captured
