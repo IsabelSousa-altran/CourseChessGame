@@ -275,29 +275,40 @@ namespace ChessGameLayer
         }
         private void placeAllPieces()
         {
-        //    PutNewPiece('c', 1, new Rook(Color.White, Board));
-        //    PutNewPiece('c', 2, new Rook(Color.White, Board));
-        //    PutNewPiece('d', 2, new Rook(Color.White, Board));
-        //    PutNewPiece('e', 2, new Rook(Color.White, Board));
-        //    PutNewPiece('e', 1, new Rook(Color.White, Board));
-        //    PutNewPiece('d', 1, new King(Color.White, Board));
-
-        //    PutNewPiece('c', 7, new Rook(Color.Black, Board));
-        //    PutNewPiece('c', 8, new Rook(Color.Black, Board));
-        //    PutNewPiece('d', 7, new Rook(Color.Black, Board));
-        //    PutNewPiece('e', 7, new Rook(Color.Black, Board));
-        //    PutNewPiece('e', 8, new Rook(Color.Black, Board));
-        //    PutNewPiece('d', 8, new King(Color.Black, Board));
-
-            PutNewPiece('c', 1, new Rook(Color.White, Board));
-            PutNewPiece('d', 1, new King(Color.White, Board));
-            PutNewPiece('h', 7, new Rook(Color.White, Board));
-
-            PutNewPiece('a', 8, new King(Color.Black, Board));
-            PutNewPiece('b', 8, new Rook(Color.Black, Board));
+            PutNewPiece('a', 1, new Rook(Color.White, Board));
+            PutNewPiece('b', 1, new Knight(Color.White, Board));
+            PutNewPiece('c', 1, new Bishop(Color.White, Board));
+            PutNewPiece('d', 1, new Queen(Color.White, Board));
+            PutNewPiece('e', 1, new King(Color.White, Board));
+            PutNewPiece('f', 1, new Bishop(Color.White, Board));
+            PutNewPiece('g', 1, new Knight(Color.White, Board));
+            PutNewPiece('h', 1, new Rook(Color.White, Board));
+            PutNewPiece('a', 2, new Pown(Color.White, Board));
+            PutNewPiece('b', 2, new Pown(Color.White, Board));
+            PutNewPiece('c', 2, new Pown(Color.White, Board));
+            PutNewPiece('d', 2, new Pown(Color.White, Board));
+            PutNewPiece('e', 2, new Pown(Color.White, Board));
+            PutNewPiece('f', 2, new Pown(Color.White, Board));
+            PutNewPiece('g', 2, new Pown(Color.White, Board));
+            PutNewPiece('h', 2, new Pown(Color.White, Board));
 
 
+            PutNewPiece('a', 8, new Rook(Color.Black, Board));
+            PutNewPiece('b', 8, new Knight(Color.Black, Board));
+            PutNewPiece('c', 8, new Bishop(Color.Black, Board));
+            PutNewPiece('d', 8, new Queen(Color.Black, Board));
+            PutNewPiece('e', 8, new King(Color.Black, Board));
+            PutNewPiece('f', 8, new Bishop(Color.Black, Board));
+            PutNewPiece('g', 8, new Knight(Color.Black, Board));
+            PutNewPiece('h', 8, new Rook(Color.Black, Board));
+            PutNewPiece('a', 7, new Pown(Color.Black, Board));
+            PutNewPiece('b', 7, new Pown(Color.Black, Board));
+            PutNewPiece('c', 7, new Pown(Color.Black, Board));
+            PutNewPiece('d', 7, new Pown(Color.Black, Board));
+            PutNewPiece('e', 7, new Pown(Color.Black, Board));
+            PutNewPiece('f', 7, new Pown(Color.Black, Board));
+            PutNewPiece('g', 7, new Pown(Color.Black, Board));
+            PutNewPiece('h', 7, new Pown(Color.Black, Board));
         }
-
     }
 }
