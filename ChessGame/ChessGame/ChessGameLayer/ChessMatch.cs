@@ -45,24 +45,64 @@ namespace ChessGameLayer
                 // Will add this piece to the list of captured pieces
                 setCapturedPieces.Add(capturedPiece);
             }
+
+            //SPECIAL MOVE : small castling
+            if (piece is King && destinationPosition.Column == originalPosition.Column + 2)
+            {
+                PositionBoard originalPositionRook = new PositionBoard(originalPosition.Row, originalPosition.Column + 3);
+                PositionBoard destinationPositionRook = new PositionBoard(originalPosition.Row, originalPosition.Column + 1);
+                Piece rook = Board.RemovePiece(originalPositionRook);
+                rook.IncreaseMovementCount();
+                Board.PlacePieceOnBoard(rook, destinationPositionRook);
+            }
+
+            //SPECIAL MOVE : big castling
+            if (piece is King && destinationPosition.Column == originalPosition.Column - 2)
+            {
+                PositionBoard originalPositionRook = new PositionBoard(originalPosition.Row, originalPosition.Column - 4);
+                PositionBoard destinationPositionRook = new PositionBoard(originalPosition.Row, originalPosition.Column - 1);
+                Piece rook = Board.RemovePiece(originalPositionRook);
+                rook.IncreaseMovementCount();
+                Board.PlacePieceOnBoard(rook, destinationPositionRook);
+            }
             return capturedPiece;
         }
 
-        public void UndoMoves(PositionBoard orignalPosition, PositionBoard destiantionPosition, Piece capturedPiece)
+        public void UndoMoves(PositionBoard originalPosition, PositionBoard destinationPosition, Piece capturedPiece)
         {
-            Piece piece = Board.RemovePiece(destiantionPosition);
+            Piece piece = Board.RemovePiece(destinationPosition);
             piece.DecreaseMovementCount();
 
             // There was a piece that was captured
             if (capturedPiece != null)
             {
                 // I go to the board and place the captured piece back at the destination
-                Board.PlacePieceOnBoard(capturedPiece, destiantionPosition);
+                Board.PlacePieceOnBoard(capturedPiece, destinationPosition);
                 // I go to the set of captured pieces and remove that captured piece
                 setCapturedPieces.Remove(capturedPiece);
             }
             // Put the piece back in the original position.
-            Board.PlacePieceOnBoard(piece, orignalPosition);
+            Board.PlacePieceOnBoard(piece, originalPosition);
+
+            //SPECIAL MOVE : small castling
+            if (piece is King && destinationPosition.Column == originalPosition.Column + 2)
+            {
+                PositionBoard originalPositionRook = new PositionBoard(originalPosition.Row, originalPosition.Column + 3);
+                PositionBoard destinationPositionRook = new PositionBoard(originalPosition.Row, originalPosition.Column + 1);
+                Piece rook = Board.RemovePiece(destinationPositionRook);
+                rook.DecreaseMovementCount();
+                Board.PlacePieceOnBoard(rook, originalPositionRook);
+            }
+
+            //SPECIAL MOVE : Big castling
+            if (piece is King && destinationPosition.Column == originalPosition.Column - 2)
+            {
+                PositionBoard originalPositionRook = new PositionBoard(originalPosition.Row, originalPosition.Column -4);
+                PositionBoard destinationPositionRook = new PositionBoard(originalPosition.Row, originalPosition.Column - 1);
+                Piece rook = Board.RemovePiece(destinationPositionRook);
+                rook.DecreaseMovementCount();
+                Board.PlacePieceOnBoard(rook, originalPositionRook);
+            }
         }
 
         // The piece will perform a movement from the origin position to the destination position.
@@ -74,7 +114,7 @@ namespace ChessGameLayer
             if (KingIsInCheck(CurrentPlayer))
             {
                 UndoMoves(originalPosition, destinationPosition, capturedPiece);
-                throw new BoardException("You can't put yourself in check");
+                throw new BoardException("You can't put yourself in check!");
             }
 
             if (KingIsInCheck(colorOpponent(CurrentPlayer)))
@@ -279,7 +319,7 @@ namespace ChessGameLayer
             PutNewPiece('b', 1, new Knight(Color.White, Board));
             PutNewPiece('c', 1, new Bishop(Color.White, Board));
             PutNewPiece('d', 1, new Queen(Color.White, Board));
-            PutNewPiece('e', 1, new King(Color.White, Board));
+            PutNewPiece('e', 1, new King(Color.White, Board, this));
             PutNewPiece('f', 1, new Bishop(Color.White, Board));
             PutNewPiece('g', 1, new Knight(Color.White, Board));
             PutNewPiece('h', 1, new Rook(Color.White, Board));
@@ -297,7 +337,7 @@ namespace ChessGameLayer
             PutNewPiece('b', 8, new Knight(Color.Black, Board));
             PutNewPiece('c', 8, new Bishop(Color.Black, Board));
             PutNewPiece('d', 8, new Queen(Color.Black, Board));
-            PutNewPiece('e', 8, new King(Color.Black, Board));
+            PutNewPiece('e', 8, new King(Color.Black, Board, this));
             PutNewPiece('f', 8, new Bishop(Color.Black, Board));
             PutNewPiece('g', 8, new Knight(Color.Black, Board));
             PutNewPiece('h', 8, new Rook(Color.Black, Board));

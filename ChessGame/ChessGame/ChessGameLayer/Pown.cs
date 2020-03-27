@@ -37,27 +37,27 @@ namespace ChessGameLayer
             if (Color == Color.White)
             {
                 // Can move up one house if the house is free.
-                position.SetPositionValues(position.Row - 1, position.Column);
+                position.SetPositionValues(PositionBoard.Row - 1, PositionBoard.Column);
                 if (Board.PositionIsValid(position) && free(position))
                 {
                     possibleMovimentsMatrix[position.Row, position.Column] = true;
                 }
 
                 // Can move two houses up if the house is free and if it is the first move of the pawn.
-                position.SetPositionValues(position.Row - 2, position.Column);
-                if (Board.PositionIsValid(position) && free(position) && MovementCount == 0)
+                position.SetPositionValues(PositionBoard.Row - 2, PositionBoard.Column);
+                if (Board.PositionIsValid(position) &&  free(position) && MovementCount == 0)
                 {
                     possibleMovimentsMatrix[position.Row, position.Column] = true;
                 }
 
                 // Can walk on diagonals if there is an enemy.
-                position.SetPositionValues(position.Row - 1, position.Column - 1);
+                position.SetPositionValues(PositionBoard.Row - 1, PositionBoard.Column - 1);
                 if (Board.PositionIsValid(position) && thereIsEnemy(position))
                 {
                     possibleMovimentsMatrix[position.Row, position.Column] = true;
                 }
 
-                position.SetPositionValues(position.Row - 1, position.Column + 1);
+                position.SetPositionValues(PositionBoard.Row - 1, PositionBoard.Column + 1);
                 if (Board.PositionIsValid(position) && thereIsEnemy(position))
                 {
                     possibleMovimentsMatrix[position.Row, position.Column] = true;
@@ -66,27 +66,28 @@ namespace ChessGameLayer
             else
             {
                 // Can move down one house if the house is free.
-                position.SetPositionValues(position.Row + 1, position.Column);
+                position.SetPositionValues(PositionBoard.Row + 1, PositionBoard.Column);
                 if (Board.PositionIsValid(position) && free(position))
                 {
                     possibleMovimentsMatrix[position.Row, position.Column] = true;
                 }
 
                 // Can move two houses down if the house is free and if it is the first move of the pawn.
-                position.SetPositionValues(position.Row + 2, position.Column);
+                position.SetPositionValues(PositionBoard.Row + 2, PositionBoard.Column);
+                //PositionBoard secondPosition = new PositionBoard(position.Row + 1, position.Column);
                 if (Board.PositionIsValid(position) && free(position) && MovementCount == 0)
                 {
                     possibleMovimentsMatrix[position.Row, position.Column] = true;
                 }
 
                 // Can walk on diagonals if there is an enemy.
-                position.SetPositionValues(position.Row + 1, position.Column - 1);
+                position.SetPositionValues(PositionBoard.Row + 1, PositionBoard.Column - 1);
                 if (Board.PositionIsValid(position) && thereIsEnemy(position))
                 {
                     possibleMovimentsMatrix[position.Row, position.Column] = true;
                 }
 
-                position.SetPositionValues(position.Row + 1, position.Column + 1);
+                position.SetPositionValues(PositionBoard.Row + 1, PositionBoard.Column + 1);
                 if (Board.PositionIsValid(position) && thereIsEnemy(position))
                 {
                     possibleMovimentsMatrix[position.Row, position.Column] = true;

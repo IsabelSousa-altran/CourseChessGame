@@ -38,7 +38,7 @@ namespace ChessGameLayer
                 {
                     break;
                 }
-                PositionBoard.SetPositionValues(position.Row - 1, position.Column);
+                position.SetPositionValues(position.Row - 1, position.Column);
             }
 
         // Below
@@ -50,7 +50,7 @@ namespace ChessGameLayer
                 {
                     break;
                 }
-                PositionBoard.SetPositionValues(position.Row + 1, position.Column);
+                position.SetPositionValues(position.Row + 1, position.Column);
             }
 
             // Right
@@ -62,7 +62,7 @@ namespace ChessGameLayer
                 {
                     break;
                 }
-                PositionBoard.SetPositionValues(position.Row, position.Column + 1);
+                position.SetPositionValues(position.Row, position.Column + 1);
 
             }
 
@@ -75,7 +75,7 @@ namespace ChessGameLayer
                 {
                     break;
                 }
-                PositionBoard.SetPositionValues(position.Row, position.Column - 1);
+                position.SetPositionValues(position.Row, position.Column - 1);
             }
 
             // Northwest
