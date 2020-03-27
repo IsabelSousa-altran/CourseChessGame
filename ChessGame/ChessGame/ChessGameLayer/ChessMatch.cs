@@ -161,6 +161,23 @@ namespace ChessGameLayer
                 throw new BoardException("You can't put yourself in check!");
             }
 
+            Piece piece = Board.Piece(destinationPosition);
+
+            // SPECIAL MOVE : Promotion
+
+            if (piece is Pawn)
+            {
+                // If the piece is a white pawn and has reached line 0 or if it is a black pawn and has reached line 7
+                if ((piece.Color == Color.White && destinationPosition.Row == 0) || (piece.Color == Color.Black && destinationPosition.Row == 7))
+                {
+                    // That pawn piece will be transformed into a queen
+                    piece = Board.RemovePiece(destinationPosition);
+                    setPieces.Remove(piece);
+                    Piece queen = new Queen(piece.Color, Board);
+                    Board.PlacePieceOnBoard(queen, destinationPosition);
+                }
+            }
+
             if (KingIsInCheck(colorOpponent(CurrentPlayer)))
             {
                 MatchInCheck = true;
@@ -183,7 +200,7 @@ namespace ChessGameLayer
                 changesPlayersTurn();
             }
 
-            Piece piece = Board.Piece(destinationPosition);
+            
 
             // #SPECIAL MOVES : En Passant
             // Se a peça é um peão e se andou duas linhas a mais ou a menos, 
