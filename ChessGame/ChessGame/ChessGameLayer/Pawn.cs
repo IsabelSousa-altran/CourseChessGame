@@ -4,10 +4,12 @@ using BoardLayer;
 
 namespace ChessGameLayer
 {
-    class Pown : Piece
+    class Pawn : Piece
     {
-        public Pown(Color color, Board board) : base(color, board)
+        private ChessMatch match;
+        public Pawn(Color color, Board board, ChessMatch match) : base(color, board)
         {
+            this.match = match;
         }
 
         public override string ToString()
@@ -62,6 +64,24 @@ namespace ChessGameLayer
                 {
                     possibleMovimentsMatrix[position.Row, position.Column] = true;
                 }
+
+                // #SPECIAL MOVES : En Passant
+                // It only happens on this line for the white pieces
+                if (PositionBoard.Row == 3)
+                {   // left pawn position
+                    PositionBoard leftPosition = new PositionBoard(PositionBoard.Row, PositionBoard.Column-1);
+                    if (Board.PositionIsValid(leftPosition) && thereIsEnemy(leftPosition) && Board.Piece(leftPosition) == match.VulnerablePieceEnPassant)
+                    {
+                        possibleMovimentsMatrix[leftPosition.Row - 1, leftPosition.Column] = true;
+                    }
+
+                    // Right pawn position
+                    PositionBoard rightPosition = new PositionBoard(PositionBoard.Row, PositionBoard.Column + 1);
+                    if (Board.PositionIsValid(rightPosition) && thereIsEnemy(rightPosition) && Board.Piece(rightPosition) == match.VulnerablePieceEnPassant)
+                    {
+                        possibleMovimentsMatrix[rightPosition.Row - 1, rightPosition.Column] = true;
+                    }
+                }
             }
             else
             {
@@ -91,6 +111,24 @@ namespace ChessGameLayer
                 if (Board.PositionIsValid(position) && thereIsEnemy(position))
                 {
                     possibleMovimentsMatrix[position.Row, position.Column] = true;
+                }
+
+                // #SPECIAL MOVES : En Passant
+                // It only happens on this line for the black pieces
+                if (PositionBoard.Row == 4)
+                {   // left pawn position
+                    PositionBoard leftPosition = new PositionBoard(PositionBoard.Row, PositionBoard.Column - 1);
+                    if (Board.PositionIsValid(leftPosition) && thereIsEnemy(leftPosition) && Board.Piece(leftPosition) == match.VulnerablePieceEnPassant)
+                    {
+                        possibleMovimentsMatrix[leftPosition.Row + 1, leftPosition.Column] = true;
+                    }
+
+                    // Right pawn position
+                    PositionBoard rightPosition = new PositionBoard(PositionBoard.Row, PositionBoard.Column + 1);
+                    if (Board.PositionIsValid(rightPosition) && thereIsEnemy(rightPosition) && Board.Piece(rightPosition) == match.VulnerablePieceEnPassant)
+                    {
+                        possibleMovimentsMatrix[rightPosition.Row + 1, rightPosition.Column] = true;
+                    }
                 }
             }
             return possibleMovimentsMatrix;
